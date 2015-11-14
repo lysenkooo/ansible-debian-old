@@ -1,0 +1,8 @@
+---
+
+- name: ensure pgbackup is installed
+  copy: src=pgbackup dest=/usr/bin/pgbackup mode=0755
+
+- name: ensure pgbackup added to crontab
+  cron: name=pgbackup minute=0 hour=*/3 job="/usr/bin/pgbackup /home/{{ user }}/.backup {{ app_name }}_{{ app_env }} {{ app_name }}"
+  become_user: "{{ user }}"

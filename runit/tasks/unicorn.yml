@@ -1,0 +1,14 @@
+- name: install unicornherder
+  pip: name=unicornherder
+
+- name: create runit service directory for unicorn
+  file: path="/etc/sv/{{ app_name }}_unicorn/log" state=directory
+
+- name: ensure runit service for unicorn is installed
+  template: src=unicorn_run dest="/etc/sv/{{ app_name }}_unicorn/run" mode=0755
+
+- name: ensure runit logger for unicorn is installed
+  template: src=unicorn_log dest="/etc/sv/{{ app_name }}_unicorn/log/run" mode=0755
+
+- name: ensure runit service for unicorn is enabled
+  file: src="/etc/sv/{{ app_name }}_unicorn" dest="/etc/service/{{ app_name }}_unicorn" state=link

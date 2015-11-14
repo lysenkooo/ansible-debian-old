@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Usage: /usr/bin/backup /home/deploy/.backup db_name db_user yandex_login yandex_password
+
+BACKUP_DIR=$1
+DB_NAME=$2
+DB_USER=$3
+YANDEX_LOGIN=$4
+YANDEX_PASSWORD=$5
+
+DATE=`date +%Y%m%d%H%M%S`
+SERVER_NAME=`uname -n`
+BACKUP_MASK="${BACKUP_DIR}/${SERVER_NAME}__${DB_NAME}"
+BACKUP_PATH="${BACKUP_MASK}__${DATE}.sql.gpg"
+SYMLINK_PATH="${BACKUP_MASK}.sql.gpg"
+
+if [ -z "$BACKUP_DIR" ]; then
+    echo "No backup path supplied"
+    exit 1
+fi
+
+mkdir -p $BACKUP_DIR
+
+pg_dump -h localhost -U "$DB_USER" -d "$DB_NAME" | gpg -c -z 5 --batch --passphrase "$SERVER_NAME" > $BACKUP_PATH
+
+ln -sf $BACKUP_PATH $SYMLINK_PATH
+
+ls -trQ1 ${BACKUP_MASK}__* | head -n -10 | xargs rm -f
+
+if [ -n "$YANDEX_PASSWORD" ]; then
+    curl --user "$YANDEX_LOGIN:$YANDEX_PASSWORD" -T "$SYMLINK_PATH" https://webdav.yandex.ru/backup/
+fi

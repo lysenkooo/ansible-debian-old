@@ -1,0 +1,8 @@
+---
+
+- name: ensure gbackup is installed
+  copy: src=gbackup dest=/usr/bin/gbackup mode=0755
+
+- name: ensure gbackup added to crontab
+  cron: name=gbackup minute=0 hour=*/3 job="/usr/bin/gbackup /home/{{ user }}/.gbackup"
+  become_user: "{{ user }}"

@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Usage: /usr/bin/gbackup /home/deploy/.gbackup
+
+SERVER_NAME=`uname -n`
+DATE=`date +%Y%m%d%H%M%S`
+BACKUP_PATH=$1
+USER=`whoami`
+EMAIL="no-reply@$SERVER_NAME"
+
+if [ -z "$BACKUP_PATH" ]; then
+    echo "No backup path supplied"
+    exit 1
+fi
+
+if [ "$USER" = "root" ]; then
+    echo "You sholdn't be logged as root"
+    exit 1
+fi
+
+git config --global user.name "$SERVER_NAME"
+git config --global user.email "$EMAIL"
+
+mkdir -p $BACKUP_PATH && cd $BACKUP_PATH
+
+if [ ! -d "$BACKUP_PATH/.git" ]; then
+    git init
+fi
+
+sudo cp --parents -r /var/spool/cron/crontabs .
+sudo cp --parents -r /etc .
+
+sudo chown -R $USER:$USER .
+
+git add . && git commit -a -m $DATE && git push

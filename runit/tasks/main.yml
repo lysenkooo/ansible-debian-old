@@ -1,0 +1,11 @@
+---
+
+- name: ensure runit is installed
+  apt: name=runit state=present
+
+- include: unicorn.yml
+  when: unicorn
+
+- include: resque.yml
+  when: resque
+

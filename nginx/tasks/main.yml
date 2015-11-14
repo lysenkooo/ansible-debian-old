@@ -1,0 +1,21 @@
+---
+
+- name: ensure /var/www is created
+  file: path=/var/www state=directory mode=0755 owner="{{ user }}" group="{{ user }}"
+
+- name: ensure nginx is installed
+  apt: name=nginx state=present
+
+- name: ensure nginx default config is disabled
+  file: path="/etc/nginx/sites-enabled/default" state=absent
+
+- name: ensure nginx is started
+  service: name=nginx state=started enabled=yes
+
+- name: ensure nginx config is installed
+  template: src=vhost dest="/etc/nginx/sites-available/{{ app_name }}" backup=yes
+
+- name: ensure nginx config is enabled
+  file: src="/etc/nginx/sites-available/{{ app_name }}" dest="/etc/nginx/sites-enabled/{{ app_name }}" state=link
+  notify:
+    - restart nginx

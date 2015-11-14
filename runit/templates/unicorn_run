@@ -1,0 +1,8 @@
+#!/bin/sh
+exec 2>&1
+export RAILS_ENV={{ app_env }}
+export SECRET_KEY_BASE={{ app_secret }}
+USER={{ user }}
+APP_ROOT={{ app_path }}
+cd $APP_ROOT
+exec chpst -u $USER /home/$USER/.rvm/wrappers/ruby-{{ ruby_version }}/bundle exec unicornherder -u unicorn -p tmp/pids/unicorn.pid -- -c $APP_ROOT/config/unicorn.rb -E $RAILS_ENV

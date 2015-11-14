@@ -1,0 +1,43 @@
+---
+
+- name: ensure cache is updated
+  apt: update_cache=yes
+
+- name: ensure essentials is installed
+  apt: name="{{ item }}" state=present
+  with_items:
+    - sudo
+    - curl
+    - wget
+    - vim
+    - git
+    - screen
+    - ntpdate
+    - apt-transport-https
+    - lsb-release
+    - python-pip
+    - python-dev
+    - fail2ban
+
+- name: ensure user has authorized key
+  authorized_key: user="{{ user }}" key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: ensure user has own ssh key
+  user: name="{{ user }}" generate_ssh_key=yes
+
+- name: ensure root login via ssh is disabled
+  lineinfile: dest=/etc/ssh/sshd_config state=present line='PermitRootLogin no' regexp='^#?PermitRootLogin'
+  notify:
+    - restart sshd
+
+- name: ensure en_US locale is installed
+  locale_gen: name=en_US.UTF-8 state=present
+
+- name: ensure ru_RU locale is installed
+  locale_gen: name=ru_RU.UTF-8 state=present
+
+- name: set time zone
+  copy: content="Europe/Moscow" dest=/etc/timezone mode=0644 owner=root group=root backup=yes
+  notify:
+    - update timezone
+    - sync time

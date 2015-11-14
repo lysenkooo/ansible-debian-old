@@ -1,0 +1,11 @@
+- name: create runit service directory for resque
+  file: path="/etc/sv/{{ app_name }}_resque/log" state=directory
+
+- name: ensure runit service for resque is installed
+  template: src=resque_run dest="/etc/sv/{{ app_name }}_resque/run" mode=0755
+
+- name: ensure runit logger for resque is installed
+  template: src=resque_log dest="/etc/sv/{{ app_name }}_resque/log/run" mode=0755
+
+- name: ensure runit service for resque is enabled
+  file: src="/etc/sv/{{ app_name }}_resque" dest="/etc/service/{{ app_name }}_resque" state=link

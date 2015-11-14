@@ -1,0 +1,6 @@
+#!/bin/sh
+exec 2>&1
+export RAILS_ENV={{ app_env }}
+USER={{ user }}
+APP_ROOT={{ app_path }}
+exec chpst su - $USER -c "cd $APP_ROOT && bundle exec resque-web -F -L"

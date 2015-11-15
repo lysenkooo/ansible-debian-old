@@ -1,2 +1,5 @@
-# ansible-roles-debian
-Ansible roles for Debian Linux
+# Ansible roles for Debian
+## How to use
+```
+ansible-playbook -i hosts.ini production.yml
+```

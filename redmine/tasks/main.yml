@@ -1,5 +1,2 @@
 ---
 
-- name: checkout redmine
-  command: svn co https://svn.redmine.org/redmine/branches/3.1-stable /var/www/redmine/current
-  become_user: "{{ user }}"

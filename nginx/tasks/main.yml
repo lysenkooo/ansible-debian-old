@@ -12,10 +12,34 @@
 - name: ensure nginx is started
   service: name=nginx state=started enabled=yes
 
-- name: ensure nginx config is installed
-  template: src=vhost dest="/etc/nginx/sites-available/{{ app_name }}" backup=yes
+- name: ensure nginx app config is installed
+  template: src=app dest="/etc/nginx/sites-available/{{ app_name }}" backup=yes
 
-- name: ensure nginx config is enabled
+- name: ensure nginx app config is enabled
   file: src="/etc/nginx/sites-available/{{ app_name }}" dest="/etc/nginx/sites-enabled/{{ app_name }}" state=link
+  notify:
+    - restart nginx
+
+- name: ensure nginx redmine config is installed
+  template: src=redmine dest="/etc/nginx/sites-available/redmine" backup=yes
+  when: redmine
+
+- name: ensure nginx redmine config is enabled
+  file: src="/etc/nginx/sites-available/redmine" dest="/etc/nginx/sites-enabled/redmine" state=link
+  when: redmine
+  notify:
+    - restart nginx
+
+- name: nginx htpasswd file is created
+  template: src=htpasswd dest="/etc/nginx/htpasswd" backup=yes
+  when: resque
+
+- name: ensure nginx resque config is installed
+  template: src=resque dest="/etc/nginx/sites-available/resque" backup=yes
+  when: resque
+
+- name: ensure nginx resque config is enabled
+  file: src="/etc/nginx/sites-available/resque" dest="/etc/nginx/sites-enabled/resque" state=link
+  when: resque
   notify:
     - restart nginx

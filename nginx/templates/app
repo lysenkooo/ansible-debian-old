@@ -3,9 +3,9 @@ upstream {{ app_name }}_backend {
 }
 
 server {
-    server_name {{ ansible_fqdn }} {{ ansible_hostname }};
+    server_name {{ ansible_fqdn }} {{ ansible_hostname }} localhost;
 
-    listen 80;
+    listen 80 default_server;
     #listen 443 ssl;
 
     #ssl_certificate /etc/nginx/ssl/certificate.crt;
@@ -18,7 +18,7 @@ server {
     access_log /var/log/nginx/{{ app_name }}_access.log;
 
     error_page 404             /404.html;
-    error_page 500 502 503 504 /50x.html;
+    error_page 500 502 503 504 /500.html;
 
     location /assets {
         access_log off;

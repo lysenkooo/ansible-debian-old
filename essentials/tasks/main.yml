@@ -18,6 +18,7 @@
     - python-pip
     - python-dev
     - fail2ban
+    - subversion
 
 - name: ensure user has authorized key
   authorized_key: user="{{ user }}" key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

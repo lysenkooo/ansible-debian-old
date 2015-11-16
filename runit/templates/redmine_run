@@ -1,0 +1,7 @@
+#!/bin/sh
+exec 2>&1
+export RAILS_ENV=production
+USER={{ user }}
+APP_ROOT=/var/www/redmine/current
+cd $APP_ROOT
+exec chpst -u $USER /home/$USER/.rvm/wrappers/ruby-{{ ruby_version }}/bundle exec rails server webrick -e $RAILS_ENV

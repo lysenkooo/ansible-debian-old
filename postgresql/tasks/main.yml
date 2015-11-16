@@ -14,18 +14,3 @@
 
 - name: ensure postgresql is started
   service: name=postgresql state=started enabled=yes
-
-- name: psycopg2 is installed
-  pip: name=psycopg2
-
-- name: ensure database is created
-  postgresql_db: name="{{ app_name }}_{{ app_env }}"
-  become_user: postgres
-
-- name: ensure user has access to database
-  postgresql_user: db="{{ app_name }}_{{ app_env }}" name="{{ app_name }}" password="{{ app_name }}" priv=ALL role_attr_flags=SUPERUSER,CREATEDB
-  become_user: postgres
-
-- name: ensure .pgpass is created
-  copy: content="localhost:5432:{{ app_name }}_{{ app_env }}:{{ app_name }}:{{ app_name }}" dest="/home/{{ user }}/.pgpass" mode=0600
-  become_user: "{{ user }}"

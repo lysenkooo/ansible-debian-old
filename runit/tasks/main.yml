@@ -9,3 +9,9 @@
 - include: resque.yml
   when: resque
 
+- include: resque_web.yml
+  when: resque_web
+
+- include: redmine.yml
+  when: redmine
+

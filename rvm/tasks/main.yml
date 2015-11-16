@@ -32,4 +32,4 @@
   shell: "/home/{{ user }}/.rvm/gems/ruby-{{ ruby_version }}/wrappers/gem install bundler"
   become_user: "{{ user }}"
   args:
-    creates: "/home/{{ user }}/.rvm/rubies/ruby-{{ ruby_version }}/lib/ruby/gems/{{ ruby_version }}/bin/bundler"
+    creates: "/home/{{ user }}/.rvm/gems/ruby-{{ ruby_version }}/bin/bundler"

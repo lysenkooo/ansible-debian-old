@@ -1,0 +1,11 @@
+- name: create runit service directory for redmine
+  file: path="/etc/sv/redmine/log" state=directory
+
+- name: ensure runit service for redmine is installed
+  template: src=redmine_run dest="/etc/sv/redmine/run" mode=0755
+
+- name: ensure runit logger for redmine is installed
+  template: src=redmine_log dest="/etc/sv/redmine/log/run" mode=0755
+
+- name: ensure runit service for redmine is enabled
+  file: src="/etc/sv/redmine" dest="/etc/service/redmine" state=link

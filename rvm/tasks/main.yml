@@ -13,7 +13,7 @@
     creates: "/home/{{ user }}/.rvm/scripts/rvm"
 
 - name: ensure autoupdate is disabled in ~/.rvmrc file
-  copy: content="rvm_autoupdate_flag=0" dest="/home/{{ user }}/.rvmrc" backup=yes
+  copy: content="rvm_autoupdate_flag=0\n" dest="/home/{{ user }}/.rvmrc" backup=yes
   become_user: "{{ user }}"
 
 - name: ensure that ruby is installed

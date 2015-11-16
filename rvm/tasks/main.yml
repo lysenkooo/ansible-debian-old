@@ -10,7 +10,7 @@
   shell: curl -L get.rvm.io | bash -s stable
   become_user: "{{ user }}"
   args:
-    creates: "/home/{{ user }}/.rvm"
+    creates: "/home/{{ user }}/.rvm/scripts/rvm"
 
 - name: ensure autoupdate is disabled in ~/.rvmrc file
   copy: content="rvm_autoupdate_flag=0" dest="/home/{{ user }}/.rvmrc" backup=yes

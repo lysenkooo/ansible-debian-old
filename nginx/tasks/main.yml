@@ -13,7 +13,18 @@
   service: name=nginx state=started enabled=yes
 
 - name: ensure nginx app config is installed
-  template: src=app dest="/etc/nginx/sites-available/{{ app_name }}" backup=yes
+  template: src="{{ item }}" dest="/etc/nginx/sites-available/{{ app_name }}" backup=yes
+  with_first_found:
+    - files:
+      - "{{ playbook_dir }}/assets/nginx_vhost.j2"
+      - vhost.j2
+  notify:
+    - reload iptables
+
+- include: ssl.yml
+  when: ssl
+  notify:
+    - restart nginx
 
 - name: ensure nginx app config is enabled
   file: src="/etc/nginx/sites-available/{{ app_name }}" dest="/etc/nginx/sites-enabled/{{ app_name }}" state=link

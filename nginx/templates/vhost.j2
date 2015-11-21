@@ -6,10 +6,13 @@ server {
     server_name {{ ansible_fqdn }} {{ ansible_hostname }} localhost;
 
     listen 80 default_server;
-    #listen 443 ssl;
 
-    #ssl_certificate /etc/nginx/ssl/certificate.crt;
-    #ssl_certificate_key /etc/nginx/ssl/certificate.key;
+    {% if ssl %}
+    listen 443 ssl;
+
+    ssl_certificate /etc/nginx/ssl/{{ ansible_fqdn }}.crt;
+    ssl_certificate_key /etc/nginx/ssl/{{ ansible_fqdn }}.key;
+    {% endif %}
 
     client_max_body_size 1G;
 

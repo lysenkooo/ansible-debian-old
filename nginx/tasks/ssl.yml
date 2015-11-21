@@ -1,0 +1,10 @@
+---
+
+- name: /etc/nginx/ssl directory is created
+  file: path=/etc/nginx/ssl state=directory mode=0755
+
+- name: copy crt file to server
+  copy: src="{{ playbook_dir }}/ssl/{{ ansible_fqdn }}.crt" dest=/etc/nginx/ssl/{{ ansible_fqdn }}.crt backup=yes
+
+- name: copy key file to server
+  copy: src="{{ playbook_dir }}/ssl/{{ ansible_fqdn }}.key" dest=/etc/nginx/ssl/{{ ansible_fqdn }}.key backup=yes

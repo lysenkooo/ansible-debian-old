@@ -1,7 +1,11 @@
 ---
 
 - name: ensure iptables rules are installed
-  copy: src=rules dest=/etc/iptables backup=yes
+  copy: src="{{ item }}" dest=/etc/iptables backup=yes
+  with_first_found:
+    - files:
+      - "{{ playbook_dir }}/assets/iptables_rules"
+      - rules
   notify:
     - reload iptables
 

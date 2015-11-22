@@ -19,7 +19,7 @@
       - "{{ playbook_dir }}/assets/nginx_vhost.j2"
       - vhost.j2
   notify:
-    - reload iptables
+    - restart nginx
 
 - include: ssl.yml
   when: ssl

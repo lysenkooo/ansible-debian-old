@@ -1,0 +1,13 @@
+---
+
+- name: pure-ftpd installed
+  apt: name="pure-ftpd-postgresql" state=present
+
+- name: pure-ftpd config is installed
+  template: src="{{ playbook_dir }}/assets/pureftpd_postgresql.j2" dest=/etc/pure-ftpd/db/postgresql.conf backup=yes
+
+- name: chroot enabled for pure-ftpd
+  copy: content="yes\n" dest=/etc/pure-ftpd/conf/ChrootEveryone
+
+- name: chroot enabled for pure-ftpd
+  copy: content="30000 31000\n" dest=/etc/pure-ftpd/conf/PassivePortRange

@@ -42,3 +42,6 @@
   notify:
     - update timezone
     - sync time
+
+- name: ensure swapiness has minimum value
+  sysctl: name=vm.swappiness value=1

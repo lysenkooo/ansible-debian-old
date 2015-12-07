@@ -15,6 +15,3 @@
 - name: ensure swap is turned on
   command: swapon -a
   when: ansible_swaptotal_mb < 1
-
-- name: ensure swapiness has corrent value
-  sysctl: name=vm.swappiness value=10
